@@ -124,24 +124,6 @@ pip install torch pandas scikit-learn matplotlib
 - **training_loss.png** – Plot of loss over epochs
 - **model.pth** – Saved model weights for later use
 
-## Loading a Trained Model
-
-```python
-import torch
-from EasyNN import Model
-
-# Initialize model with same architecture
-model = Model(in_features=63, hl=[128, 64, 32], out_features=8)
-
-# Load saved weights
-model.load_state_dict(torch.load('model.pth'))
-model.eval()
-
-# Make predictions
-with torch.no_grad():
-    predictions = model(your_input_tensor)
-```
-
 ## Credits
 
 Originally developed following [Codemy.com PyTorch tutorials](https://youtube.com/playlist?list=PLCC34OHNcOtpcgR9LEYSdi9r7XIbpkpK1&si=qN9cA47jvIpXJ6Ez), then extended with additional features for general use.
