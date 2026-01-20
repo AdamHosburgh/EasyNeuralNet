@@ -1,8 +1,3 @@
-## Credits
-
-- Originally developed following [Codemy.com PyTorch tutorials](https://youtube.com/playlist?list=PLCC34OHNcOtpcgR9LEYSdi9r7XIbpkpK1&si=qN9cA47jvIpXJ6Ez)
-- Code assistance and ReadMe generation provided by Claude Opus 4.5 (Anthropic), an AI assistant
-
 # ML Templates
 
 A collection of beginner-friendly PyTorch templates for creating and training neural networks. Each template features easy configuration with all settings in one place at the top of the file—just set your parameters and run!
@@ -109,10 +104,10 @@ pip install torch pandas scikit-learn matplotlib
 5. **Review results** in the console output and generated plots
 
 ---
-
 ## Credits
 
-Originally developed following [Codemy.com PyTorch tutorials](https://youtube.com/playlist?list=PLCC34OHNcOtpcgR9LEYSdi9r7XIbpkpK1&si=qN9cA47jvIpXJ6Ez), then extended with additional features for general use.
+- Originally developed following [Codemy.com PyTorch tutorials](https://youtube.com/playlist?list=PLCC34OHNcOtpcgR9LEYSdi9r7XIbpkpK1&si=qN9cA47jvIpXJ6Ez)
+- Code assistance and ReadMe generation provided by Claude Opus 4.5 (Anthropic), an AI assistant
 
 ## License
 
