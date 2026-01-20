@@ -1,17 +1,68 @@
-# EasyNN - Simple Neural Network Template
+## Credits
 
-A beginner-friendly PyTorch template for creating and training neural networks. Configure your model architecture, training parameters, and data sources all in one place—no deep learning expertise required.
+- Originally developed following [Codemy.com PyTorch tutorials](https://youtube.com/playlist?list=PLCC34OHNcOtpcgR9LEYSdi9r7XIbpkpK1&si=qN9cA47jvIpXJ6Ez)
+- Code assistance and ReadMe generation provided by Claude Opus 4.5 (Anthropic), an AI assistant
 
-## Features
+# ML Templates
 
-- **Easy Configuration** – All settings in one section at the top of the file
-- **Flexible Architecture** – Customizable hidden layers, activation functions, and dropout
-- **Multiple Loss Functions** – Support for classification and regression tasks
-- **Multiple Optimizers** – Adam, AdamW, SGD, RMSprop, and more
-- **Automatic Data Splitting** – Built-in train/test split functionality
-- **Data Scaling** – Optional MinMax scaling for input features
-- **Training Visualization** – Automatic loss plot generation
-- **Model Evaluation** – Accuracy metrics for classification, MSE/RMSE/MAE/R² for regression
+A collection of beginner-friendly PyTorch templates for creating and training neural networks. Each template features easy configuration with all settings in one place at the top of the file—just set your parameters and run!
+
+---
+
+## Available Templates
+
+| Template | Best For | Status |
+|----------|----------|--------|
+| [EasyNN](#easynn) | Tabular data, classification, regression | ✅ Available |
+| [EasyRNN](#easyrnn) | Time series, sequences, forecasting | ✅ Available |
+| [EasyCNN](#easycnn) | Image data, spatial patterns | 🚧 Coming Soon |
+
+---
+
+## EasyNN
+
+**Multilayer Perceptron (MLP) for tabular/structured data**
+
+Use EasyNN when you have CSV data with independent samples—each row is a separate data point with features as columns. Great for classification and regression tasks.
+
+**Best for:**
+- Classification (spam detection, disease diagnosis)
+- Regression (price prediction, score estimation)
+- Any tabular dataset with extracted features
+
+📖 **[Full Documentation →](README_EasyNN.md)**
+
+---
+
+## EasyRNN
+
+**Recurrent Neural Network for sequential data**
+
+Use EasyRNN when the order of your data matters. Ideal for time series forecasting and sequence prediction where past values influence future predictions.
+
+**Best for:**
+- Time series forecasting (stock prices, weather, sensors)
+- Predictive maintenance (Remaining Useful Life prediction)
+- Sequence classification (activity recognition, anomaly detection)
+
+📖 **[Full Documentation →](README_EasyRNN.md)**
+
+---
+
+## EasyCNN
+
+**Convolutional Neural Network for image and spatial data**
+
+🚧 *Coming Soon*
+
+Use EasyCNN when working with image data or any data where spatial relationships between neighboring elements matter.
+
+**Will support:**
+- Image classification
+- Pattern recognition
+- Feature extraction from visual data
+
+---
 
 ## Requirements
 
@@ -47,82 +98,17 @@ python -m venv venv
 pip install torch pandas scikit-learn matplotlib
 ```
 
+---
+
 ## Quick Start
 
-1. **Prepare your data** – Create a CSV file with your features and target columns
+1. **Choose your template** based on your data type (see table above)
+2. **Prepare your data** as a CSV file
+3. **Configure parameters** at the top of the script
+4. **Run the script**: `python EasyNN.py` or `python EasyRNN.py`
+5. **Review results** in the console output and generated plots
 
-2. **Configure the model** – Edit the USER CONFIGURATION section in `EasyNN.py`:
-   ```python
-   # Neural Network Architecture
-   IN_FEATURES = 63          # Number of input features
-   HIDDEN_LAYERS = [128, 64, 32]  # Hidden layer sizes
-   OUT_FEATURES = 8          # Number of output classes/values
-   
-   # Data Settings
-   TRAINING_DATA_PATH = 'Train.csv'
-   FEATURE_COLUMNS = '0-62'  # Input feature columns
-   TARGET_COLUMNS = '63'     # Target/label column
-   
-   # Training Settings
-   EPOCHS = 1500
-   LEARNING_RATE = 0.001
-   ```
-
-3. **Run training**:
-   ```bash
-   python EasyNN.py
-   ```
-
-4. **Check results** – View `training_loss.png` and console output for metrics
-
-## Configuration Options
-
-### Architecture
-| Parameter | Description | Example |
-|-----------|-------------|---------|
-| `IN_FEATURES` | Number of input features | `63` |
-| `HIDDEN_LAYERS` | List of hidden layer sizes | `[128, 64, 32]` |
-| `OUT_FEATURES` | Number of outputs | `8` |
-| `DROPOUT` | Dropout rate (0 to disable) | `0.2` |
-| `ACTIVATION` | Activation function | `'gelu'`, `'relu'`, `'leaky_relu'`, `'elu'`, `'silu'`, `'mish'` |
-| `BATCH_NORM` | Enable batch normalization | `True` or `False` |
-
-### Loss Functions
-| Value | Use Case |
-|-------|----------|
-| `'cross_entropy'` | Multi-class classification (default) |
-| `'bce_logits'` | Binary classification |
-| `'mse'` | Regression |
-| `'l1'` | Regression (less sensitive to outliers) |
-| `'smooth_l1'` | Regression (balanced) |
-| `'huber'` | Regression (robust to outliers) |
-
-### Optimizers
-| Value | Description |
-|-------|-------------|
-| `'adam'` | Adaptive learning rate (default, great for most cases) |
-| `'adamw'` | Adam with weight decay (better regularization) |
-| `'sgd'` | Stochastic gradient descent (classic) |
-| `'rmsprop'` | Good for RNNs |
-| `'nadam'` | Adam + Nesterov momentum |
-| `'radam'` | Rectified Adam (stable early training) |
-
-### Data Settings
-| Parameter | Description |
-|-----------|-------------|
-| `TRAINING_DATA_PATH` | Path to training CSV file |
-| `FEATURE_COLUMNS` | Column indices for features (e.g., `'0-62'` or `'0,1,5-10'`) |
-| `TARGET_COLUMNS` | Column indices for targets |
-| `USE_TRAINING_DATA_AS_TEST` | Split training data for testing |
-| `TRAIN_TEST_SPLIT` | Test set ratio (e.g., `0.2` = 20%) |
-| `TEST_DATA_PATH` | Separate test file (if not splitting) |
-| `SCALE_DATA` | Normalize features to 0-1 range |
-
-## Output
-
-- **Console** – Training progress, loss values, and evaluation metrics
-- **training_loss.png** – Plot of loss over epochs
-- **model.pth** – Saved model weights for later use
+---
 
 ## Credits
 

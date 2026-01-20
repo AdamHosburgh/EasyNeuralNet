@@ -1,9 +1,15 @@
-# This program was originally made by following along with Codemy.com tutorials on YouTube.
-# Playlist here:
-# https://youtube.com/playlist?list=PLCC34OHNcOtpcgR9LEYSdi9r7XIbpkpK1&si=qN9cA47jvIpXJ6Ez
+"""
+EasyNN - Multilayer Perceptron (MLP) Neural Network Template
 
-# It has since been modified for use as a template for easy neural network creation and training using PyTorch.
+A simple, configurable template for building and training feedforward neural
+networks using PyTorch. Ideal for classification and regression tasks on
+tabular/structured data.
 
+Originally developed following Codemy.com PyTorch tutorials:
+https://youtube.com/playlist?list=PLCC34OHNcOtpcgR9LEYSdi9r7XIbpkpK1
+
+Code assistance provided by Claude (Anthropic).
+"""
 
 import torch
 import torch.nn as nn
@@ -20,14 +26,14 @@ MANUAL_SEED = 42
 
 # Neural Network Architecture Parameters
 IN_FEATURES = 63
-HIDDEN_LAYERS = [128, 64, 32]
+HIDDEN_LAYERS = [128, 64, 32, 16]
 OUT_FEATURES = 8
 
 # Dropout rate for regularization (0 to disable, 0.1-0.5 typical)
-DROPOUT = 0
+DROPOUT = 0.2
 
 # Activation function ('gelu', 'relu', 'leaky_relu', 'elu', 'silu', 'mish')
-ACTIVATION = 'gelu'
+ACTIVATION = 'relu'
 
 # Batch Normalization flag
 BATCH_NORM = False
@@ -49,7 +55,7 @@ USE_TRAINING_DATA_AS_TEST = True
 SCALE_DATA = False
 
 # Train/Test split ratio (only used if USE_TRAINING_DATA_AS_TEST is True)
-TRAIN_TEST_SPLIT = 0.2  
+TRAIN_TEST_SPLIT = 0.15  
 
 # Testing data file path (only used if USE_TRAINING_DATA_AS_TEST is False, Set to = TRAINING_DATA_PATH if unused)
 TEST_DATA_PATH = TRAINING_DATA_PATH  
@@ -58,10 +64,10 @@ TEST_DATA_PATH = TRAINING_DATA_PATH
 OPTIMIZER = 'adam'
 
 # Learning rate (step size for optimizer)
-LEARNING_RATE = 0.001
+LEARNING_RATE = 0.01
 
 # Number of training epochs
-EPOCHS = 1500
+EPOCHS = 1000
 
 # Path to save the trained model (model.pth recommended)
 SAVE_MODEL_FILE_PATH = 'model.pth'
@@ -69,8 +75,16 @@ SAVE_MODEL_FILE_PATH = 'model.pth'
 ''' ========== MODEL DEFINITION (Do not edit below) ========== '''
 
 class Model(nn.Module):
+    """
+    Flexible feedforward neural network (MLP) with configurable architecture.
 
-    # Available activation functions
+    Supports custom hidden layer sizes, activation functions, dropout,
+    and batch normalization.
+
+    Attributes:
+        ACTIVATIONS: Dictionary mapping activation names to functions.
+    """
+
     ACTIVATIONS = {
         'gelu': F.gelu,                         # Smooth, modern. Great for transformers and NLP
         'relu': F.relu,                         # Fast, simple default. Can suffer "dying ReLU"
@@ -80,12 +94,22 @@ class Model(nn.Module):
         'mish': torch.nn.functional.mish,       # Smooth, self-regularizing. Emerging choice
     }
 
-    # Model initialization
-    def __init__(self, in_features=IN_FEATURES, hl=HIDDEN_LAYERS, out_features=OUT_FEATURES, 
+    def __init__(self, in_features=IN_FEATURES, hl=HIDDEN_LAYERS, out_features=OUT_FEATURES,
                  dropout=DROPOUT, activation=ACTIVATION, batch_norm=BATCH_NORM):
+        """
+        Initialize the neural network.
+
+        Args:
+            in_features: Number of input features.
+            hl: List of hidden layer sizes.
+            out_features: Number of output features/classes.
+            dropout: Dropout rate (0 to disable).
+            activation: Activation function name.
+            batch_norm: Whether to use batch normalization.
+        """
         super().__init__()
-        
-        # Validating parameters
+
+        # Validate parameters
         if not (0 <= dropout < 1):
             raise ValueError("Dropout must be >=0 and <1")
         if activation not in self.ACTIVATIONS:
@@ -118,9 +142,16 @@ class Model(nn.Module):
         if dropout > 0:
             self.dropout = nn.Dropout(dropout)
 
-    # Forward pass
     def forward(self, x):
-        # Pass data through each layer with activation, batch norm, and dropout as specified
+        """
+        Forward pass through the network.
+
+        Args:
+            x: Input tensor of shape (batch_size, in_features).
+
+        Returns:
+            Output tensor of shape (batch_size, out_features).
+        """
         for i in range(len(self.fc) - 1):
             x = self.fc[i](x)
             if self.batch_norm:
@@ -128,9 +159,8 @@ class Model(nn.Module):
             x = self.activation(x)
             if self.dropout_rate > 0:
                 x = self.dropout(x)
-        # Final output layer
+
         x = self.fc[-1](x)
-        # Return the final output
         return x
     
 torch.manual_seed(MANUAL_SEED)
@@ -181,11 +211,17 @@ else:
     train_df = Training_df
     test_df = pd.read_csv(TEST_DATA_PATH)
 
-# Function to parse column range strings
 def parse_column_range(range_str):
     """
     Parse column range string into list of indices.
-    Supports: '0-20', '5', '0,1,5-10', '0-5,10,15-20'
+
+    Supports formats: '0-20', '5', '0,1,5-10', '0-5,10,15-20'
+
+    Args:
+        range_str: String specifying column indices or ranges.
+
+    Returns:
+        List of integer column indices.
     """
     indices = []
     parts = range_str.replace(' ', '').split(',')
@@ -239,48 +275,43 @@ else:
 loss_criterion = LOSS_FUNCTIONS[LOSS_FUNCTION]()
 optimizer = OPTIMIZERS[OPTIMIZER](model.parameters(), lr=LEARNING_RATE)
 
-'''=========== MODEL TRAINING ========== '''
-# Define number of training epochs
+''' ========== MODEL TRAINING ========== '''
+
 epochs = EPOCHS
-# List to store loss values for plotting later
 losses = []
 
 for i in range(epochs):
-    # Forward pass: get predictions
+    # Forward pass
     y_pred = model.forward(X_train)
-
-    # Compute loss
     loss = loss_criterion(y_pred, y_train)
 
-    # Backpropagation: zero gradients, compute new gradients, update weights
-    optimizer.zero_grad()   # Clear old gradients
-    loss.backward()         # Compute gradients
-    optimizer.step()        # Update weights
+    # Backpropagation
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
 
-    # Store loss for plotting
     losses.append(loss.item())
 
-    # Print loss every 10 epochs
-    if (i+1) % 10 == 0:
-        print(f"Epoch {i+1}/{epochs}, Loss: {loss.item():.4f}")
+    if (i + 1) % 10 == 0:
+        print(f"Epoch {i + 1}/{epochs}, Loss: {loss.item():.4f}")
 
-# Plot training loss over epochs
+# Plot training loss
 plt.figure(figsize=(10, 6))
 plt.plot(range(epochs), losses)
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
 plt.title('Training Loss over Epochs')
-plt.savefig('training_loss.png')  # Save plot to file
+plt.savefig('training_loss.png')
 print("Training loss plot saved as 'training_loss.png'")
 
-# Evaluate Model on Test Data Set
+# Evaluate model on test set
 with torch.no_grad():
     y_eval = model.forward(X_test)
     test_loss = loss_criterion(y_eval, y_test)
 
 print(f"Test Loss: {test_loss.item():.4f}")
 
-# Calculate accuracy on test set for classification tasks
+# Classification metrics
 if LOSS_FUNCTION in ['cross_entropy', 'nll']:
     model.eval()
     with torch.no_grad():
@@ -289,47 +320,39 @@ if LOSS_FUNCTION in ['cross_entropy', 'nll']:
         accuracy = correct / y_test.size(0)
     print(f"Test Accuracy: {accuracy * 100:.2f}% ({correct}/{y_test.size(0)} correct)")
 
-    # Print first 20 predictions as examples
     print("\nFirst 20 Predictions vs Actual:")
     for i in range(min(20, y_test.size(0))):
-        print(f"{i+1}.) Predicted: {y_pred_classes[i].item()} \t Actual: {y_test[i].item()}")
+        print(f"{i + 1}.) Predicted: {y_pred_classes[i].item()} \t Actual: {y_test[i].item()}")
 
-# Evaluate regression models with appropriate metrics
+# Regression metrics
 else:
     model.eval()
     with torch.no_grad():
         y_pred = model(X_test)
-        
-        # Mean Squared Error (MSE)
+
         mse = torch.mean((y_pred - y_test) ** 2).item()
-        
-        # Root Mean Squared Error (RMSE)
         rmse = torch.sqrt(torch.mean((y_pred - y_test) ** 2)).item()
-        
-        # Mean Absolute Error (MAE)
         mae = torch.mean(torch.abs(y_pred - y_test)).item()
-        
-        # R² Score (Coefficient of Determination)
+
         ss_res = torch.sum((y_test - y_pred) ** 2)
         ss_tot = torch.sum((y_test - torch.mean(y_test)) ** 2)
         r2 = (1 - ss_res / ss_tot).item()
-        
-    print(f"\n--- Regression Metrics ---")
+
+    print("\n--- Regression Metrics ---")
     print(f"MSE:  {mse:.4f}")
     print(f"RMSE: {rmse:.4f}")
     print(f"MAE:  {mae:.4f}")
     print(f"R²:   {r2:.4f}")
-    
-    # Print first 20 predictions as examples
+
     print("\nFirst 20 Predictions vs Actual:")
     for i in range(min(20, y_test.size(0))):
         if len(target_cols) == 1:
-            print(f"{i+1}.) Predicted: {y_pred[i].item():.4f} \t Actual: {y_test[i].item():.4f}")
+            print(f"{i + 1}.) Predicted: {y_pred[i].item():.4f} \t Actual: {y_test[i].item():.4f}")
         else:
             pred_str = ', '.join([f"{v:.2f}" for v in y_pred[i].tolist()])
             actual_str = ', '.join([f"{v:.2f}" for v in y_test[i].tolist()])
-            print(f"{i+1}.) Predicted: [{pred_str}] \t Actual: [{actual_str}]")
+            print(f"{i + 1}.) Predicted: [{pred_str}] \t Actual: [{actual_str}]")
 
-# Save the trained model to a file for later use
+# Save model
 torch.save(model.state_dict(), SAVE_MODEL_FILE_PATH)
 print(f"Model saved as '{SAVE_MODEL_FILE_PATH}'")    

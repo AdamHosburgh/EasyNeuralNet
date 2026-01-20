@@ -1,0 +1,7 @@
+# Step 2 - Create and Activate a Python Virtual Enviroment
+
+python3 -m venv --upgrade-deps venv
+source venv/bin/activate
+
+# Run this script with: 
+# bash 2_ve.txt
