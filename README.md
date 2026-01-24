@@ -6,8 +6,8 @@ A collection of beginner-friendly PyTorch templates for creating and training ne
 
 ## Available Templates
 
-| Template | Best For | Status |
-|----------|----------|--------|
+| Template | Best For |
+|----------|----------|
 | [EasyNN](#easynn) | Tabular data, classification, regression |
 | [EasyRNN](#easyrnn) | Time series, sequences, forecasting |
 | [EasyCNN](#easycnn) | Image data, spatial patterns |
