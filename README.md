@@ -6,11 +6,19 @@ A collection of beginner-friendly PyTorch templates for creating and training ne
 
 ## Available Templates
 
+<<<<<<< Updated upstream
 | Template | Best For |
 |----------|----------|
 | [EasyNN](#easynn) | Tabular data, classification, regression |
 | [EasyRNN](#easyrnn) | Time series, sequences, forecasting |
 | [EasyCNN](#easycnn) | Image data, spatial patterns |
+=======
+| Template | Best For | Status |
+|----------|----------|--------|
+| [EasyNN](#easynn) | Tabular data, classification, regression | ✅ Available |
+| [EasyRNN](#easyrnn) | Time series, sequences, forecasting | ✅ Available |
+| [EasyCNN](#easycnn) | Image data, spatial patterns | ✅ Available |
+>>>>>>> Stashed changes
 
 ---
 
@@ -48,12 +56,18 @@ Use EasyRNN when the order of your data matters. Ideal for time series forecasti
 
 **Convolutional Neural Network for image and spatial data**
 
+<<<<<<< Updated upstream
 Use EasyCNN when working with image data or any data where spatial relationships between neighboring elements matter.
+=======
+Use EasyCNN when working with image data or any data where spatial relationships between neighboring elements matter. Expects images organized in folders by class.
 
-**Will support:**
-- Image classification
-- Pattern recognition
-- Feature extraction from visual data
+**Best for:**
+- Image classification (cats vs dogs, digit recognition)
+- Medical imaging (X-ray classification, tumor detection)
+- Pattern recognition (texture classification, defect detection)
+>>>>>>> Stashed changes
+
+📖 **[Full Documentation →](README_EasyCNN.md)**
 
 ---
 
@@ -61,6 +75,7 @@ Use EasyCNN when working with image data or any data where spatial relationships
 
 - Python 3.8+
 - PyTorch
+- torchvision (for EasyCNN)
 - pandas
 - scikit-learn
 - matplotlib
@@ -77,7 +92,7 @@ python3 -m venv --upgrade-deps venv
 source venv/bin/activate
 
 # 3. Install dependencies
-pip install torch pandas scikit-learn matplotlib
+pip install torch torchvision pandas scikit-learn matplotlib
 ```
 
 ### Windows/macOS
@@ -88,7 +103,7 @@ python -m venv venv
 # macOS: source venv/bin/activate
 
 # Install dependencies
-pip install torch pandas scikit-learn matplotlib
+pip install torch torchvision pandas scikit-learn matplotlib
 ```
 
 ---
