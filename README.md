@@ -48,8 +48,6 @@ Use EasyRNN when the order of your data matters. Ideal for time series forecasti
 
 **Convolutional Neural Network for image and spatial data**
 
-🚧 *Coming Soon*
-
 Use EasyCNN when working with image data or any data where spatial relationships between neighboring elements matter.
 
 **Will support:**
